@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.luckstro.videooverlay">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.VideosBrowserActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ProjectConfigurationActivity"
+            android:parentActivityName=".activity.VideosBrowserActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.VideosBrowserActivity" />
+        </activity>
+        <activity android:name=".activity.AddTeamActivity" />
+        <activity android:name=".activity.ImageBrowserActivity" />
+        <activity android:name=".activity.EditPlayerActivity" />
+        <activity android:name=".activity.AddCommentToProjectActivity" />
+        <activity android:name=".activity.AddPlayerToProjectActivity" />
+        <activity android:name=".activity.TelestratorActivity" />
+        <activity
+            android:name=".activity.DrawingActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activity.AddScoreToProjectActivity" />
+        <activity
+            android:name=".activity.SpotShadowActivity"
+            android:label="@string/title_activity_spot_shadow"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

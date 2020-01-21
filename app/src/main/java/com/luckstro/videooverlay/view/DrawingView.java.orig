@@ -1,0 +1,180 @@
+package com.luckstro.videooverlay.view;
+
+import android.content.Context;
+import android.graphics.SurfaceTexture;
+import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.view.MotionEvent;
+
+import com.luckstro.videooverlay.graphics.DrawingPath;
+import com.luckstro.videooverlay.opengl.BitmapRenderer;
+import com.luckstro.videooverlay.opengl.VideoRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
+/**
+ * Created by ejdd5cj on 11/18/2017.
+ */
+
+public class DrawingView extends SurfaceView {
+    //drawing path
+    private Path drawPath;
+    //drawing and canvas paint
+    private Paint drawPaint, canvasPaint;
+    //initial color
+    private int paintColor = 0xFF660000;
+    //canvas
+    private Canvas drawCanvas;
+    //canvas bitmap
+    private Bitmap canvasBitmap;
+
+    private List<DrawingPath> drawingPaths = new ArrayList<>();
+    private DrawingPath currentPath;
+    private DrawingViewRenderer renderer;
+
+    public DrawingView(Context context, AttributeSet attrs){
+        super(context, attrs);
+        setupDrawing();
+    }
+
+    public DrawingView(Context context) {
+        super(context);
+        init();
+        setupDrawing();
+    }
+
+    public void init() {
+        renderer = new DrawingViewRenderer(this, 100, 100);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        //view given size
+        super.onSizeChanged(w, h, oldw, oldh);
+        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(canvasBitmap);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        //draw view
+        canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+        canvas.drawPath(drawPath, drawPaint);
+        Log.i("DrawingView", "Drawing the canvas.");
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //detect user touch
+        float touchX = event.getX();
+        float touchY = event.getY();
+
+        Log.i("DrawingView", "Handling Touch Event: " + event.getAction() +
+                " X: " + touchX + " Y: " + touchY);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                drawPath.moveTo(touchX, touchY);
+                DrawingPath drawingPath = new DrawingPath();
+                drawingPath.addPoint(touchX, touchY);
+                drawingPaths.add(drawingPath);
+                currentPath = drawingPath;
+                Canvas canvasa = getHolder().lockCanvas();
+                draw(canvasa);
+                getHolder().unlockCanvasAndPost(canvasa);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                drawPath.lineTo(touchX, touchY);
+                currentPath.addPoint(touchX, touchY);
+                Canvas canvas = getHolder().lockCanvas();
+                draw(canvas);
+                getHolder().unlockCanvasAndPost(canvas);
+                break;
+            case MotionEvent.ACTION_UP:
+                drawCanvas.drawPath(drawPath, drawPaint);
+                currentPath.addPoint(touchX, touchY);
+                Canvas canvasb = getHolder().lockCanvas();
+                draw(canvasb);
+                getHolder().unlockCanvasAndPost(canvasb);
+                drawPath.reset();
+                break;
+            default:
+                return false;
+        }
+
+        invalidate();
+        return true;
+    }
+
+    private void setupDrawing(){
+        //get drawing area setup for interaction
+        drawPath = new Path();
+        drawPaint = new Paint();
+
+        drawPaint.setColor(paintColor);
+        drawPaint.setAntiAlias(true);
+        drawPaint.setStrokeWidth(20);
+        drawPaint.setStyle(Paint.Style.STROKE);
+        drawPaint.setStrokeJoin(Paint.Join.ROUND);
+        drawPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        canvasPaint = new Paint(Paint.DITHER_FLAG);
+    }
+
+    public Bitmap getCanvasBitmap() {
+        return canvasBitmap;
+    }
+
+    public Path getDrawPath() {
+        return drawPath;
+    }
+
+    public Paint getDrawPaint() {
+        return drawPaint;
+    }
+
+    private static class DrawingViewRenderer
+            implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener {
+        private BitmapRenderer renderer;
+        private DrawingView drawingView;
+
+        public DrawingViewRenderer(DrawingView drawingView, float screenWidth, float screenHeight) {
+            this.drawingView = drawingView;
+            renderer = new BitmapRenderer(drawingView.getContext(), screenWidth, screenHeight, drawingView.getCanvasBitmap());
+        }
+        @Override
+        public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+
+        }
+
+        @Override
+        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        }
+
+        @Override
+        public void onSurfaceChanged(GL10 gl, int width, int height) {
+
+        }
+
+        @Override
+        public void onDrawFrame(GL10 gl) {
+            Log.i("DrawingViewRenderer", "onDrawFrame");
+
+            renderer.setBitmap(drawingView.getCanvasBitmap());
+            renderer.create();
+            renderer.drawFrame();
+        }
+    }
+}

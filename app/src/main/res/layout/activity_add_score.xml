@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/team_details_background"
+        android:elevation="2dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/away_team_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Away Team" />
+
+        <Spinner
+            android:id="@+id/away_team_spinner"
+            android:layout_toRightOf="@id/away_team_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+        <TextView
+            android:id="@+id/away_team_score_label"
+            android:layout_below="@id/away_team_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Away Team Score" />
+
+        <EditText
+            android:id="@+id/away_team_score"
+            android:layout_toRightOf="@id/away_team_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/home_team_label"
+            android:layout_below="@id/away_team_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Team" />
+
+        <Spinner
+            android:id="@+id/home_team_spinner"
+            android:layout_toRightOf="@id/home_team_label"
+            android:layout_below="@id/away_team_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+        <TextView
+            android:id="@+id/home_team_score_label"
+            android:layout_below="@id/home_team_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Team Score" />
+
+        <EditText
+            android:id="@+id/home_team_score"
+            android:layout_below="@id/home_team_spinner"
+            android:layout_toRightOf="@id/home_team_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:id="@+id/spaceHolder"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_below="@id/home_team_score_label"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/spaceHolder"
+            android:layout_toStartOf="@id/spaceHolder"
+            android:layout_below="@id/home_team_score_label"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:background="@drawable/clear_button"
+            android:textColor="@color/blue"
+            android:text="Save"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"/>
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/spaceHolder"
+            android:layout_toEndOf="@id/spaceHolder"
+            android:layout_below="@id/home_team_score_label"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:background="@drawable/clear_button"
+            android:textColor="@color/blue"
+            android:text="Cancel"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"/>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

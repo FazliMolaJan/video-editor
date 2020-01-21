@@ -1,0 +1,208 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_team_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context="com.luckstro.videooverlay.fragment.AddTeamFragment"
+    android:foreground="@drawable/rectangle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        tools:context="com.luckstro.videooverlay.fragment.AddTeamFragment">
+
+        <EditText
+            android:id="@+id/team_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_name_long" />
+
+        <EditText
+            android:id="@+id/team_name_long"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_name_short" />
+
+        <EditText
+            android:id="@+id/team_name_short"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_color" />
+
+        <EditText
+            android:id="@+id/team_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_red"
+            android:theme="@style/RedButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:onClick="onClick"
+            android:text=" "
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_purple"
+            android:theme="@style/PurpleButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:onClick="onClick"
+            android:text=" "
+            android:visibility="gone" />
+
+
+        <Button
+            android:id="@+id/team_color_green"
+            android:theme="@style/GreenButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_yellow"
+            android:theme="@style/YellowButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_orange"
+            android:theme="@style/OrangeButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_gold"
+            android:theme="@style/GoldButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_light_blue"
+            android:theme="@style/LightBlueButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_blue"
+            android:theme="@style/BlueButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_dark_blue"
+            android:theme="@style/DarkBlueButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_silver"
+            android:theme="@style/SilverButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_white"
+            android:theme="@style/WhiteButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/team_color_black"
+            android:theme="@style/BlackButton"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:text=" "
+            android:onClick="onClick"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logo" />
+
+        <ImageView
+            android:id="@+id/team_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_picker_icon"
+            android:onClick="onClick"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/add_team_save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:textColor="@color/colorPrimary"
+                android:onClick="onClick"
+                android:text="@string/save"/>
+
+            <Button
+                android:id="@+id/add_team_on_time_use_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:textColor="@color/colorPrimary"
+                android:onClick="onClick"
+                android:text="@string/one_time"/>
+
+            <Button
+                android:id="@+id/add_team_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:textColor="@color/colorPrimary"
+                android:onClick="onClick"
+                android:text="@string/cancel"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

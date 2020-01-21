@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Sportify</string>
+    <string name="no_projects">There are currently no saved projects.</string>
+    <string name="new_or_load_project">Do you wish to create a new project or use an existing project?</string>
+    <string name="new_project">New Project</string>
+    <string name="existing_project">Existing Project</string>
+    <string name="choose_activity_type">Choose an activity:</string>
+    <string name="add_player_info">Add Player Info</string>
+
+    <string name="home_team">Home Team</string>
+    <string name="team_name_long">Team Name</string>
+    <string name="team_mascot">Mascot</string>
+    <string name="team_name_short">Abbr</string>
+    <string name="team_color">Color</string>
+    <string name="home_team_score">Home Team Score</string>
+    <string name="away_team">Away Team</string>
+    <string name="away_team_score">Away Team Score</string>
+    <string name="logo">Logo</string>
+
+    <string name="player">Player</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="nick_name">Nick Name</string>
+
+    <string name="add_comment">Add Comment</string>
+    <string name="add_score">Add Score</string>
+    <string name="add_player">Add Player</string>
+    <string name="add_spotshadow">Add Spot Shadow</string>
+    <string name="telestrate">Telestrate</string>
+    <string name="comment">Comment</string>
+    <string name="create_video">Create Video</string>
+    <string name="preview_video">Preview Video</string>
+
+    <string name="icon">Icon</string>
+
+    <string name="action">Select an Action:</string>
+    <string name="save">SAVE</string>
+    <string name="one_time">ONE TIME USE</string>
+    <string name="cancel">CANCEL</string>
+
+    <string name="start_new">New</string>
+    <string name="brush">Brush</string>
+    <string name="erase">Erase</string>
+    <string name="paint">Paint</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_add_team">AddTeamActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_spot_shadow">SpotShadowActivity</string>
+</resources>

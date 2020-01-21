@@ -1,0 +1,125 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.luckstro.videooverlay.fragment.ColorPickerFragment">
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/color_picker_red"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/color_picker_purple"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+        <Button
+            android:id="@+id/color_picker_green"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+    </TableRow>
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/color_picker_yellow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/color_picker_orange"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+        <Button
+            android:id="@+id/color_picker_gold"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+    </TableRow>
+
+    <TableRow>
+        <Button
+            android:id="@+id/color_picker_light_blue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/color_picker_blue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+        <Button
+            android:id="@+id/color_picker_dark_blue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+    </TableRow>
+
+    <TableRow>
+        <Button
+            android:id="@+id/color_picker_silver"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/color_picker_white"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+
+        <Button
+            android:id="@+id/color_picker_black"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/color_button"
+            android:text=" "  />
+    </TableRow>
+
+</TableLayout>

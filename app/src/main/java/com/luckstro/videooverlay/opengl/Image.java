@@ -1,0 +1,286 @@
+package com.luckstro.videooverlay.opengl;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.opengl.GLES20;
+import android.opengl.GLUtils;
+import android.opengl.Matrix;
+
+import com.luckstro.videooverlay.R;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+/**
+ * Created by ejdd5cj on 10/20/2017.
+ */
+
+public class Image {
+    // Our matrices
+    private final float[] mtrxProjection = new float[16];
+    private final float[] mtrxView = new float[16];
+    private final float[] mtrxProjectionAndView = new float[16];
+
+    public static short indices[] = new short[] {0, 1, 2, 0, 2, 3};
+    public FloatBuffer vertexBuffer;
+    public ShortBuffer drawListBuffer;
+    public FloatBuffer uvBuffer;
+    private FloatBuffer colorBuffer;
+
+    public static float uvs[] = new float[] {
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f
+    };
+
+    float[] colors = new float[]
+            {1f, 0f, 0f, 1f};
+
+    // Our screenresolution (Or size of the view we are playing the video)
+    private float leftX;
+    private float topY;
+    private float rightX;
+    private float bottomY;
+    private float viewWidth;
+    private float viewHeight;
+
+    // Misc
+    private Context context;
+    private int programId;
+    private int textureId;
+
+    // number of coordinates per vertex in this array
+    private static final int COORDS_PER_VERTEX = 3;
+    private float triangleCoords[];
+
+    // Bitmap
+    private byte[] image;
+    private Bitmap bitmap;
+    private boolean reinitializeVertex = false;
+    private boolean reinitializeBitmap = false;
+
+    public Image(Context context, float leftX, float rightX, float topY, float bottomY,
+                 float viewWidth, float viewHeight, byte[] image) {
+        this.context = context;
+        this.leftX = leftX;
+        this.topY = topY;
+        this.rightX = rightX;
+        this.bottomY = bottomY;
+        this.viewHeight = viewHeight;
+        this.viewWidth = viewWidth;
+        this.image = image;
+    }
+
+    public void create() {
+        createTriangleCoordinates();
+        createRectangle();
+        setupImage();
+        setupOpenGl();
+        surfaceChanged(new Float(viewWidth).intValue(), new Float(viewHeight).intValue());
+    }
+
+    private void createTriangleCoordinates() {
+        triangleCoords = new float[]{
+                leftX, topY, 0f,
+                leftX, bottomY, 0f,
+                rightX, bottomY, 0f,
+                rightX, topY, 0f,
+        };
+    }
+
+    private void createRectangle() {
+        // The vertex buffer.
+        ByteBuffer bb = ByteBuffer.allocateDirect(triangleCoords.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(triangleCoords);
+        vertexBuffer.position(0);
+
+        // initialize byte buffer for the draw list
+        ByteBuffer dlb = ByteBuffer.allocateDirect(indices.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        drawListBuffer = dlb.asShortBuffer();
+        drawListBuffer.put(indices);
+        drawListBuffer.position(0);
+
+        // The Color buffer.
+        ByteBuffer bb3 = ByteBuffer.allocateDirect(colors.length * 4);
+        bb3.order(ByteOrder.nativeOrder());
+        colorBuffer = bb3.asFloatBuffer();
+        colorBuffer.put(colors);
+        colorBuffer.position(0);
+        TextureRender.checkGlError("TextManager colorBuffer");
+    }
+
+    private void setupOpenGl() {
+        // Create the shaders, images
+        int vertexShader = com.luckstro.videooverlay.RiGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
+                RiGraphicTools.vs_Image);
+        int fragmentShader = com.luckstro.videooverlay.RiGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,
+                RiGraphicTools.fs_Image);
+
+        programId = GLES20.glCreateProgram();
+        GLES20.glAttachShader(programId, vertexShader);
+        GLES20.glAttachShader(programId, fragmentShader);
+        GLES20.glLinkProgram(programId);
+    }
+
+    public void surfaceChanged(int width, int height) {
+        // Clear our matrices
+        for(int i=0;i<16;i++) {
+            mtrxProjection[i] = 0.0f;
+            mtrxView[i] = 0.0f;
+            mtrxProjectionAndView[i] = 0.0f;
+        }
+
+        // Setup our screen width and height for normal sprite translation.
+        Matrix.orthoM(mtrxProjection, 0, 0f, viewWidth, 0.0f, viewHeight, 0, 50);
+
+        // Set the camera position (View matrix)
+        Matrix.setLookAtM(mtrxView, 0, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+
+        // Calculate the projection and view transformation
+        Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0);
+    }
+
+    public void draw() {
+        if (reinitializeVertex) {
+            createTriangleCoordinates();
+            vertexBuffer.put(triangleCoords);
+            vertexBuffer.position(0);
+        }
+
+        if (reinitializeBitmap) {
+            reinitializeBitmap();
+            reinitializeBitmap = false;
+        }
+
+        // Set our shader program
+        GLES20.glUseProgram(programId);
+
+        // clear Screen and Depth Buffer, we have set the clear color as black.
+        //GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        // get handle to vertex shader's vPosition member
+        int positionHandle = GLES20.glGetAttribLocation(programId, "vPosition");
+
+        // Enable generic vertex attribute array
+        GLES20.glEnableVertexAttribArray(positionHandle);
+
+        // Prepare the triangle coordinate data
+        GLES20.glVertexAttribPointer(positionHandle, 3,
+                GLES20.GL_FLOAT, false, 0, vertexBuffer);
+
+        // Get handle to texture coordinates location
+        int mTexCoordLoc = GLES20.glGetAttribLocation(programId, "a_texCoord");
+
+        // Enable generic vertex attribute array
+        GLES20.glEnableVertexAttribArray ( mTexCoordLoc );
+
+        // Prepare the texturecoordinates
+        GLES20.glVertexAttribPointer ( mTexCoordLoc, 2, GLES20.GL_FLOAT,
+                false,
+                0, uvBuffer);
+
+        // Get handle to shape's transformation matrix
+        int mtrxhandle = GLES20.glGetUniformLocation(programId, "uMVPMatrix");
+
+        // Apply the projection and view transformation
+        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, mtrxProjectionAndView, 0);
+
+        // Get handle to textures locations
+        int mSamplerLoc = GLES20.glGetUniformLocation (programId, "s_texture" );
+
+        // Set the sampler texture unit to 0, where we have saved the texture.
+        GLES20.glUniform1i ( mSamplerLoc, 0);
+
+        // Draw the triangle
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
+                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(mTexCoordLoc);
+    }
+
+    private void setupImage() {
+        // The texture buffer
+        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        uvBuffer = bb.asFloatBuffer();
+        uvBuffer.put(uvs);
+        uvBuffer.position(0);
+
+        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        //Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.emory_profile);
+
+        // Set blending for alpha channel
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR);
+        Object o = GLUtils.getInternalFormat(bmp);
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
+
+        // We are done using the bitmap so we should recycle it.
+        bmp.recycle();
+    }
+
+    private void reinitializeBitmap() {
+        // The texture buffer
+//        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
+//        bb.order(ByteOrder.nativeOrder());
+//        uvBuffer = bb.asFloatBuffer();
+//        uvBuffer.put(uvs);
+//        uvBuffer.position(0);
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR);
+        Object o = GLUtils.getInternalFormat(bitmap);
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        // We are done using the bitmap so we should recycle it.
+        bitmap.recycle();
+    }
+
+    public void setTextureId(int textureId) {
+        this.textureId = textureId;
+    }
+
+    public void reposition(float leftX, float rightX, float topY, float bottomY) {
+        this.leftX = leftX;
+        this.rightX = rightX;
+        this.topY = topY;
+        this.bottomY = bottomY;
+        this.reinitializeVertex = true;
+    }
+
+    public void resetBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        reinitializeBitmap = true;
+    }
+}
